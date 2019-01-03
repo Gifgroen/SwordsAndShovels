@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RandomizeLightStreak : MonoBehaviour
 {
     public Vector2 streakWidthRange = new Vector2(2, 2);
 
-    void Awake()
+    private void Awake()
     {
         LineRenderer lr = GetComponent<LineRenderer>();
         Light l = GetComponent<Light>();
@@ -23,6 +21,4 @@ public class RandomizeLightStreak : MonoBehaviour
             l.spotAngle = r * 3;
         }
     }
-
-
 }
