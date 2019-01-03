@@ -28,7 +28,7 @@ public class UIManager : Manager<UIManager>
     private void Start()
     {
         _mainMenu.OnMainMenuFadeComplete.AddListener(HandleMainMenuFadeComplete);
-        GameManager.Instance.OnGameStateChanged.AddListener(HandleGameStateChanged);
+        GameManager.Instance.onGameStateChanged.AddListener(HandleGameStateChanged);
     }
 
     void HandleMainMenuFadeComplete(bool fadeOut)
@@ -42,15 +42,15 @@ public class UIManager : Manager<UIManager>
 
     void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)
     {
-        _pauseMenu.gameObject.SetActive(currentState == GameManager.GameState.PAUSED);
-        bool showUnitFrame = currentState == GameManager.GameState.RUNNING ||
-                                                        currentState == GameManager.GameState.PAUSED;
+        _pauseMenu.gameObject.SetActive(currentState == GameManager.GameState.Paused);
+        bool showUnitFrame = currentState == GameManager.GameState.Running ||
+                                                        currentState == GameManager.GameState.Paused;
         unitFrame.SetActive(showUnitFrame);
     } 
     
     private void Update()
     {
-        if (GameManager.Instance.CurrentGameState != GameManager.GameState.PREGAME)
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Pregame)
         {
             return;
         }
@@ -110,7 +110,7 @@ public class UIManager : Manager<UIManager>
     {
         _mainMenu.gameObject.SetActive(true);
         _mainMenu.FadeOut();
-        GameManager.Instance.CurrentGameState = GameManager.GameState.RUNNING;
+        GameManager.Instance.CurrentGameState = GameManager.GameState.Running;
     }
 
 

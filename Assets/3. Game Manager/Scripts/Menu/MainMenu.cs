@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.OnGameStateChanged.AddListener(HandleGameStateChanged);
+        GameManager.Instance.onGameStateChanged.AddListener(HandleGameStateChanged);
     }
 
     public void OnFadeOutComplete()
@@ -28,12 +28,12 @@ public class MainMenu : MonoBehaviour
 
     void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)
     {
-        if (previousState == GameManager.GameState.PREGAME && currentState == GameManager.GameState.RUNNING)
+        if (previousState == GameManager.GameState.Pregame && currentState == GameManager.GameState.Running)
         {
             FadeOut();
         }
 
-        if (previousState != GameManager.GameState.PREGAME && currentState == GameManager.GameState.PREGAME)
+        if (previousState != GameManager.GameState.Pregame && currentState == GameManager.GameState.Pregame)
         {
             FadeIn();
         }

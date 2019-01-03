@@ -11,13 +11,13 @@ public class EnemyHealthBar : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start () 
+    private void Start () 
     {
         localScale = transform.localScale;	
 	}
 	
 	// Update is called once per frame
-	void Update () 
+    private void Update () 
     {
         if(enemyStats != null)
         {

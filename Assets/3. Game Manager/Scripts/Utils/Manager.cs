@@ -2,19 +2,19 @@
 
 public abstract class Manager<T> : MonoBehaviour where T : MonoBehaviour
 {
-    private static T instance;
+    private static T _instance;
 
     public static T Instance
     {
-        get { return instance; }
-        set
+        get { return _instance; }
+        private set
         {
-            if (null == instance)
+            if (null == _instance)
             {
-                instance = value;
-                DontDestroyOnLoad(instance.gameObject);
+                _instance = value;
+                DontDestroyOnLoad(_instance.gameObject);
             }
-            else if (instance != value)
+            else if (_instance != value)
             {
                 Destroy(value.gameObject);
             }

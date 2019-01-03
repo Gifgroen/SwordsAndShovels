@@ -21,12 +21,12 @@ public class MouseManager : MonoBehaviour
     private void Awake()
     {
         if(GameManager.Instance != null)
-            GameManager.Instance.OnGameStateChanged.AddListener(HandleGameStateChanged);
+            GameManager.Instance.onGameStateChanged.AddListener(HandleGameStateChanged);
     }
 
     void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)
     {
-        _useDefaultCursor = (currentState != GameManager.GameState.RUNNING);
+        _useDefaultCursor = (currentState != GameManager.GameState.Running);
     }
 
     void Update()

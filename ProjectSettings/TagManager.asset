@@ -15,6 +15,7 @@ TagManager:
   - ChestArmor
   - Weapon
   - Chest
+  - GameManager
   layers:
   - Default
   - TransparentFX

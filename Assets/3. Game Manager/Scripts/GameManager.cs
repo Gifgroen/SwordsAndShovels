@@ -7,24 +7,26 @@ using System;
 
 public class GameManager : Manager<GameManager>
 {
+    public const string Tag = "GameManager";
+
     public enum GameState
     {
-        PREGAME,
-        RUNNING,
-        PAUSED,
-        POSTGAME
+        Pregame,
+        Running,
+        Paused,
+        Postgame
     }
 
-    public GameObject[] SystemPrefabs;
-    public Events.EventGameState OnGameStateChanged;
+    public GameObject[] systemPrefabs;
+    public Events.EventGameState onGameStateChanged;
 
-    List<GameObject> _instancedSystemPrefabs;
+    private List<GameObject> instancedSystemPrefabs;
 
-    GameState _currentGameState = GameState.PREGAME;
+    private GameState currentGameState = GameState.Pregame;
 
-    string _currentLevelName = string.Empty;
+    private string currentLevelName = string.Empty;
 
-    private static SessionStats CurrentSession;
+    private static SessionStats _currentSession;
 
     private HeroController heroController;
 
@@ -36,29 +38,26 @@ public class GameManager : Manager<GameManager>
             {
                 heroController = FindObjectOfType<HeroController>();
             }
-
             return heroController;
         }
     }
 
     public GameState CurrentGameState
     {
-        get { return _currentGameState; }
-        set { _currentGameState = value; }
+        get { return currentGameState; }
+        set { currentGameState = value; }
     }
 
     private void Start()
     {
-        _instancedSystemPrefabs = new List<GameObject>();
-
+        instancedSystemPrefabs = new List<GameObject>();
         InstantiateSystemPrefabs();
-
         UIManager.Instance.OnMainMenuFadeComplete.AddListener(HandleMainMenuFadeComplete);
     }
 
     private void Update()
     {
-        if (_currentGameState == GameState.PREGAME)
+        if (currentGameState == GameState.Pregame)
         {
             return;
         }
@@ -69,19 +68,19 @@ public class GameManager : Manager<GameManager>
         }
     }
 
-    void OnLoadOperationComplete(AsyncOperation ao)
+    private void OnLoadOperationComplete(AsyncOperation ao)
     {
 
-        if (_currentLevelName == "Main")
+        if (currentLevelName == "Main")
         {
-            UpdateState(GameState.RUNNING);
-            Instance.InitSessions();
+            UpdateState(GameState.Running);
+            InitSessions();
         }
 
         Debug.Log("Load Complete.");
     }
 
-    void HandleMainMenuFadeComplete(bool fadeOut)
+    private static void HandleMainMenuFadeComplete(bool fadeOut)
     {
         if (!fadeOut)
         {
@@ -91,37 +90,30 @@ public class GameManager : Manager<GameManager>
 
     void UpdateState(GameState state)
     {
-        GameState previousGameState = _currentGameState;
-        _currentGameState = state;
+        GameState previousGameState = currentGameState;
+        currentGameState = state;
 
-        switch (_currentGameState)
+        switch (currentGameState)
         {
-            case GameState.PREGAME:
+            case GameState.Pregame:
                 Time.timeScale = 1.0f;
                 break;
-
-            case GameState.RUNNING:
+            case GameState.Running:
                 Time.timeScale = 1.0f;
                 break;
-
-            case GameState.PAUSED:
+            case GameState.Paused:
                 Time.timeScale = 0.0f;
-                break;
-
-            default:
                 break;
         }
 
-        OnGameStateChanged.Invoke(_currentGameState, previousGameState);
+        onGameStateChanged.Invoke(currentGameState, previousGameState);
     }
 
-    void InstantiateSystemPrefabs()
+    private void InstantiateSystemPrefabs()
     {
-        GameObject prefabInstance;
-        for (int i = 0; i < SystemPrefabs.Length; ++i)
+        foreach (var fab in systemPrefabs)
         {
-            prefabInstance = Instantiate(SystemPrefabs[i]);
-            _instancedSystemPrefabs.Add(prefabInstance);
+            instancedSystemPrefabs.Add(Instantiate(fab));
         }
     }
 
@@ -136,19 +128,19 @@ public class GameManager : Manager<GameManager>
 
         ao.completed += OnLoadOperationComplete;
 
-        _currentLevelName = levelName;
+        currentLevelName = levelName;
     }
 
     protected void OnDestroy()
     {
-        if (_instancedSystemPrefabs == null)
+        if (instancedSystemPrefabs == null)
             return;
 
-        for (int i = 0; i < _instancedSystemPrefabs.Count; ++i)
+        foreach (var fab in instancedSystemPrefabs)
         {
-            Destroy(_instancedSystemPrefabs[i]);
+            Destroy(fab);
         }
-        _instancedSystemPrefabs.Clear();
+        instancedSystemPrefabs.Clear();
     }
 
     public void StartGame()
@@ -158,12 +150,12 @@ public class GameManager : Manager<GameManager>
 
     public void TogglePause()
     {
-        UpdateState(_currentGameState == GameState.RUNNING ? GameState.PAUSED : GameState.RUNNING);
+        UpdateState(currentGameState == GameState.Running ? GameState.Paused : GameState.Running);
     }
 
     public void RestartGame()
     {
-        UpdateState(GameState.PREGAME);
+        UpdateState(GameState.Pregame);
     }
 
     public void QuitGame()
@@ -202,14 +194,14 @@ public class GameManager : Manager<GameManager>
 
     public void OnOutOfWaves()
     {
-        CurrentSession.WavesCompleted += 1;
+        _currentSession.WavesCompleted += 1;
         SaveSession(EndGameState.Win);
         UIManager.Instance.PlayYouWin();
     }
 
     public void OnNextWave()
     {
-        CurrentSession.WavesCompleted += 1;
+        _currentSession.WavesCompleted += 1;
         UIManager.Instance.PlayNextWave();
     }
 
@@ -222,14 +214,14 @@ public class GameManager : Manager<GameManager>
 
     public void OnMobDied()
     {
-        CurrentSession.MobsKilled += 1;
+        _currentSession.MobsKilled += 1;
     }
 
     #endregion
 
     public IEnumerator EndGame()
     {
-        UpdateState(GameState.POSTGAME);
+        UpdateState(GameState.Postgame);
         yield return new WaitForSeconds(1.5f);
         UIManager.Instance.HideUI();
         SceneManager.LoadScene("GameOver");
@@ -238,7 +230,7 @@ public class GameManager : Manager<GameManager>
     public void RestartFromEndGame()
     {
         SceneManager.LoadScene("Main");
-        Instance.InitSessions();
+        InitSessions();
         UIManager.Instance.ShowUI();
         RestartGame();
     }
@@ -250,21 +242,21 @@ public class GameManager : Manager<GameManager>
 
     #region Stats
 
-    private void InitSessions()
+    private static void InitSessions()
     {
         StatsManager.SaveFilePath = Path.Combine(Application.persistentDataPath, "saveGame.json");
         StatsManager.LoadSessions();
-        CurrentSession = new SessionStats();
+        _currentSession = new SessionStats();
     }
 
     public void SaveSession(EndGameState endGameState)
     {
-        CurrentSession.SessionDate = DateTime.Now.ToLongDateString();
-        CurrentSession.HighestLevel = hero.GetCurrentLevel();
-        CurrentSession.WinOrLoss = endGameState;
-        CurrentSession.ExperienceGained = hero.GetCurrentXP();
+        _currentSession.SessionDate = DateTime.Now.ToLongDateString();
+        _currentSession.HighestLevel = hero.GetCurrentLevel();
+        _currentSession.WinOrLoss = endGameState;
+        _currentSession.ExperienceGained = hero.GetCurrentXp();
 
-        StatsManager.sessionKeeper.Sessions.Add(CurrentSession);
+        StatsManager.sessionKeeper.Sessions.Add(_currentSession);
         StatsManager.SaveSessions();
     }
 
