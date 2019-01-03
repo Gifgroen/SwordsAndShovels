@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff583f062ffbf244985485bd800c07b, type: 3}
+  m_Name: HealthPotion
+  m_EditorClassIdentifier: 
+  itemName: Health Potion
+  itemType: 0
+  itemArmorSubType: 0
+  itemAmount: 20
+  spawnChanceWeight: 5
+  itemMaterial: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 9df91856dd70c9f4bb73fdaf74f8a6b7, type: 3}
+  itemSpawnObject: {fileID: 54210893519517534, guid: 2a226cf746bc64abab403477ee47867c,
+    type: 2}
+  weaponSlotObject: {fileID: 0}
+  isEquipped: 0
+  isInteractable: 1
+  isStorable: 1
+  isUnique: 0
+  isIndestructable: 0
+  isQuestItem: 0
+  isStackable: 1
+  destroyOnUse: 1
+  itemWeight: 0.01
