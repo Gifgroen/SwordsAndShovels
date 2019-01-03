@@ -70,8 +70,7 @@ public class HeroController : MonoBehaviour
 
     public void AttackTarget(GameObject target)
     {
-        var weapon = stats.GetCurrentWeapon();
-        if (weapon == null)
+        if (stats.GetCurrentWeapon() == null)
         {
             return;
         }

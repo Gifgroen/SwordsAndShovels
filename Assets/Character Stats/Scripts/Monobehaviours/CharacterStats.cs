@@ -10,13 +10,6 @@ public class CharacterStats : MonoBehaviour
     public CharacterInventory charInv;
     public GameObject characterWeaponSlot;
 
-    #region Constructors
-    public CharacterStats()
-    {
-        charInv = CharacterInventory.instance;
-    }
-    #endregion
-
     #region Initializations
     private void Awake()
     {
@@ -109,6 +102,10 @@ public class CharacterStats : MonoBehaviour
         return characterDefinition.currentResistance;
     }
 
+    public bool IsOverEncumbered(float itemWeight)
+    {
+        return (characterDefinition.currentEncumbrance + itemWeight) > characterDefinition.maxEncumbrance;
+    }
     #endregion
 
     #region Stat Initializers

@@ -26,6 +26,6 @@ public class PauseMenu : MonoBehaviour
 
     void HandleQuitClicked()
     {
-        GameManager.Instance.QuitGame();
+        GameManager.QuitGame();
     }
 }

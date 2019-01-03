@@ -124,7 +124,7 @@ public class CharacterStats_SO : ScriptableObject
         weapon = weaponPickUp;
         charInventory.inventoryDisplaySlots[2].sprite = weaponPickUp.itemDefinition.itemIcon;
         Instantiate(weaponPickUp.itemDefinition.weaponSlotObject.weaponPreb, weaponSlot.transform);
-        currentDamage = baseDamage + weapon.itemDefinition.itemAmount;
+        currentDamage = baseDamage + weapon.itemDefinition.amount;
     }
 
     public void EquipArmor(ItemPickUp armorPickUp, CharacterInventory charInventory)
@@ -134,27 +134,27 @@ public class CharacterStats_SO : ScriptableObject
             case ItemArmorSubType.Head:
                 charInventory.inventoryDisplaySlots[3].sprite = armorPickUp.itemDefinition.itemIcon;
                 headArmor = armorPickUp;
-                currentResistance += armorPickUp.itemDefinition.itemAmount;
+                currentResistance += armorPickUp.itemDefinition.amount;
                 break;
             case ItemArmorSubType.Chest:
                 charInventory.inventoryDisplaySlots[4].sprite = armorPickUp.itemDefinition.itemIcon;
                 chestArmor = armorPickUp;
-                currentResistance += armorPickUp.itemDefinition.itemAmount;
+                currentResistance += armorPickUp.itemDefinition.amount;
                 break;
             case ItemArmorSubType.Hands:
                 charInventory.inventoryDisplaySlots[5].sprite = armorPickUp.itemDefinition.itemIcon;
                 handArmor = armorPickUp;
-                currentResistance += armorPickUp.itemDefinition.itemAmount;
+                currentResistance += armorPickUp.itemDefinition.amount;
                 break;
             case ItemArmorSubType.Legs:
                 charInventory.inventoryDisplaySlots[6].sprite = armorPickUp.itemDefinition.itemIcon;
                 legArmor = armorPickUp;
-                currentResistance += armorPickUp.itemDefinition.itemAmount;
+                currentResistance += armorPickUp.itemDefinition.amount;
                 break;
             case ItemArmorSubType.Boots:
                 charInventory.inventoryDisplaySlots[7].sprite = armorPickUp.itemDefinition.itemIcon;
                 footArmor = armorPickUp;
-                currentResistance += armorPickUp.itemDefinition.itemAmount;
+                currentResistance += armorPickUp.itemDefinition.amount;
                 break;
         }
     }
@@ -217,7 +217,7 @@ public class CharacterStats_SO : ScriptableObject
                         previousArmorSame = true;
                     }
                     charInventory.inventoryDisplaySlots[3].sprite = null;
-                    currentResistance -= armorPickUp.itemDefinition.itemAmount;
+                    currentResistance -= armorPickUp.itemDefinition.amount;
                     headArmor = null;
                 }
                 break;
@@ -229,7 +229,7 @@ public class CharacterStats_SO : ScriptableObject
                         previousArmorSame = true;
                     }
                     charInventory.inventoryDisplaySlots[4].sprite = null;
-                    currentResistance -= armorPickUp.itemDefinition.itemAmount;
+                    currentResistance -= armorPickUp.itemDefinition.amount;
                     chestArmor = null;
                 }
                 break;
@@ -241,7 +241,7 @@ public class CharacterStats_SO : ScriptableObject
                         previousArmorSame = true;
                     }
                     charInventory.inventoryDisplaySlots[5].sprite = null;
-                    currentResistance -= armorPickUp.itemDefinition.itemAmount;
+                    currentResistance -= armorPickUp.itemDefinition.amount;
                     handArmor = null;
                 }
                 break;
@@ -253,7 +253,7 @@ public class CharacterStats_SO : ScriptableObject
                         previousArmorSame = true;
                     }
                     charInventory.inventoryDisplaySlots[6].sprite = null;
-                    currentResistance -= armorPickUp.itemDefinition.itemAmount;
+                    currentResistance -= armorPickUp.itemDefinition.amount;
                     legArmor = null;
                 }
                 break;
@@ -265,7 +265,7 @@ public class CharacterStats_SO : ScriptableObject
                         previousArmorSame = true;
                     }
                     charInventory.inventoryDisplaySlots[7].sprite = null;
-                    currentResistance -= armorPickUp.itemDefinition.itemAmount;
+                    currentResistance -= armorPickUp.itemDefinition.amount;
                     footArmor = null;
                 }
                 break;
@@ -300,7 +300,7 @@ public class CharacterStats_SO : ScriptableObject
         currentDamage = charLevels[newLevel].baseDamage;
         if (weapon != null)
         {
-            currentDamage += weapon.itemDefinition.itemAmount;
+            currentDamage += weapon.itemDefinition.amount;
         }
 
         baseResistance = charLevels[newLevel].baseResistance;

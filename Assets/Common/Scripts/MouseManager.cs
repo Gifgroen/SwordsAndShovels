@@ -20,8 +20,10 @@ public class MouseManager : MonoBehaviour
 
     private void Awake()
     {
-        if(GameManager.Instance != null)
-            GameManager.Instance.onGameStateChanged.AddListener(HandleGameStateChanged);
+        var gameManager = GameManager.Instance;
+        if(gameManager != null) {
+            gameManager.onGameStateChanged.AddListener(HandleGameStateChanged);
+        }
     }
 
     void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)

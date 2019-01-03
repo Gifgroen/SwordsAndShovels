@@ -1,48 +1,29 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public class ItemPickUp : MonoBehaviour
 {
     public ItemPickUps_SO itemDefinition;
 
-    public CharacterStats charStats;
-    CharacterInventory charInventory;
-
-    GameObject foundStats;
-
-    #region Constructors
-    public ItemPickUp()
+    private void StoreItem(CharacterInventory charInventory, CharacterStats stats)
     {
-        charInventory = CharacterInventory.instance;
-    }
-    #endregion
-
-    void Start()
-    {
-        foundStats = GameObject.FindGameObjectWithTag("Player");
-        charStats = foundStats.GetComponent<CharacterStats>();
+        charInventory.StoreItem(this, stats);
     }
 
-    void StoreItem()
-    {
-        charInventory.StoreItem(this);
-    }
-
-    public void UseItem()
+    [SuppressMessage("ReSharper", "SwitchStatementMissingSomeCases")]
+    public void UseItem(CharacterStats charStats)
     {
         switch (itemDefinition.itemType)
         {
             case ItemTypeDefinitions.HEALTH:
-                charStats.ApplyHealth(itemDefinition.itemAmount);
+                charStats.ApplyHealth(itemDefinition.amount);
                 Debug.Log(charStats.GetHealth());
                 break;
             case ItemTypeDefinitions.MANA:
-                charStats.ApplyMana(itemDefinition.itemAmount);
+                charStats.ApplyMana(itemDefinition.amount);
                 break;
             case ItemTypeDefinitions.WEALTH:
-                charStats.GiveWealth(itemDefinition.itemAmount);
+                charStats.GiveWealth(itemDefinition.amount);
                 break;
             case ItemTypeDefinitions.WEAPON:
                 charStats.ChangeWeapon(this);
@@ -55,16 +36,19 @@ public class ItemPickUp : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (!other.CompareTag("Player"))
         {
-            if (itemDefinition.isStorable)
-            {
-                StoreItem();
-            }
-            else
-            {
-                UseItem();
-            }
+            return;
+        }
+
+        var stats = other.GetComponent<CharacterStats>();
+        if (itemDefinition.isStorable)
+        {
+            StoreItem(other.GetComponentInChildren<CharacterInventory>(), stats);
+        }
+        else
+        {
+            UseItem(stats);
         }
     }
 }

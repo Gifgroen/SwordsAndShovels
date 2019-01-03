@@ -27,7 +27,7 @@ public class UIManager : Manager<UIManager>
 
     private void Start()
     {
-        _mainMenu.OnMainMenuFadeComplete.AddListener(HandleMainMenuFadeComplete);
+        _mainMenu.onMainMenuFadeComplete.AddListener(HandleMainMenuFadeComplete);
         GameManager.Instance.onGameStateChanged.AddListener(HandleGameStateChanged);
     }
 

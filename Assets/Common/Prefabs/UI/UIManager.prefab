@@ -857,10 +857,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0fab458a76d2bb439c0caeeb4b5d95b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mainMenuAnimator: {fileID: 111958717725990638}
-  _fadeOutAnimation: {fileID: 7400000, guid: cd3a7154a27cac349b264a32093d18f0, type: 2}
-  _fadeInAnimation: {fileID: 7400000, guid: af5d964feb87dcd49a040f93b5e3a220, type: 2}
-  OnMainMenuFadeComplete:
+  mainMenuAnimator: {fileID: 111958717725990638}
+  fadeOutAnimation: {fileID: 7400000, guid: cd3a7154a27cac349b264a32093d18f0, type: 2}
+  fadeInAnimation: {fileID: 7400000, guid: af5d964feb87dcd49a040f93b5e3a220, type: 2}
+  onMainMenuFadeComplete:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Events+EventFadeComplete, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,

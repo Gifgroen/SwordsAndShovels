@@ -8,6 +8,11 @@ using System;
 public class GameManager : Manager<GameManager>
 {
     public const string Tag = "GameManager";
+    
+    [SerializeField]
+    private string initialLevelName = "Main";
+    private const string GameOverLevelName = "GameOver";
+    private const string RecapLevelName = "Recap";
 
     public enum GameState
     {
@@ -71,7 +76,7 @@ public class GameManager : Manager<GameManager>
     private void OnLoadOperationComplete(AsyncOperation ao)
     {
 
-        if (currentLevelName == "Main")
+        if (currentLevelName == initialLevelName)
         {
             UpdateState(GameState.Running);
             InitSessions();
@@ -93,6 +98,7 @@ public class GameManager : Manager<GameManager>
         GameState previousGameState = currentGameState;
         currentGameState = state;
 
+        // ReSharper disable once SwitchStatementMissingSomeCases
         switch (currentGameState)
         {
             case GameState.Pregame:
@@ -117,7 +123,7 @@ public class GameManager : Manager<GameManager>
         }
     }
 
-    public void LoadLevel(string levelName)
+    private void LoadLevel(string levelName)
     {
         AsyncOperation ao = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
         if (ao == null)
@@ -125,7 +131,6 @@ public class GameManager : Manager<GameManager>
             Debug.LogError("[GameManager] Unable to load level " + levelName);
             return;
         }
-
         ao.completed += OnLoadOperationComplete;
 
         currentLevelName = levelName;
@@ -145,7 +150,7 @@ public class GameManager : Manager<GameManager>
 
     public void StartGame()
     {
-        LoadLevel("Main");
+        LoadLevel(initialLevelName);
     }
 
     public void TogglePause()
@@ -158,7 +163,7 @@ public class GameManager : Manager<GameManager>
         UpdateState(GameState.Pregame);
     }
 
-    public void QuitGame()
+    public static void QuitGame()
     {
         // implement features for quitting
         Application.Quit();
@@ -224,12 +229,12 @@ public class GameManager : Manager<GameManager>
         UpdateState(GameState.Postgame);
         yield return new WaitForSeconds(1.5f);
         UIManager.Instance.HideUI();
-        SceneManager.LoadScene("GameOver");
+        SceneManager.LoadScene(GameOverLevelName);
     }
 
     public void RestartFromEndGame()
     {
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene(initialLevelName);
         InitSessions();
         UIManager.Instance.ShowUI();
         RestartGame();
@@ -237,7 +242,7 @@ public class GameManager : Manager<GameManager>
 
     public void ShowRecap()
     {
-        SceneManager.LoadScene("Recap");
+        SceneManager.LoadScene(RecapLevelName);
     }
 
     #region Stats

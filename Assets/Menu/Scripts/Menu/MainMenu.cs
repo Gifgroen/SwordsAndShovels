@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {    
-    [SerializeField] private Animation _mainMenuAnimator;
-    [SerializeField] private AnimationClip _fadeOutAnimation;
-    [SerializeField] private AnimationClip _fadeInAnimation;
+    [SerializeField] private Animation mainMenuAnimator;
+    [SerializeField] private AnimationClip fadeOutAnimation;
+    [SerializeField] private AnimationClip fadeInAnimation;
 
-    public Events.EventFadeComplete OnMainMenuFadeComplete;
+    public Events.EventFadeComplete onMainMenuFadeComplete;
 
     private void Start()
     {
@@ -17,12 +17,12 @@ public class MainMenu : MonoBehaviour
 
     public void OnFadeOutComplete()
     {
-        OnMainMenuFadeComplete.Invoke(true);
+        onMainMenuFadeComplete.Invoke(true);
     }
 
     public void OnFadeInComplete()
     {
-        OnMainMenuFadeComplete.Invoke(false);
+        onMainMenuFadeComplete.Invoke(false);
         UIManager.Instance.SetDummyCameraActive(true);
     }
 
@@ -41,17 +41,17 @@ public class MainMenu : MonoBehaviour
 
     public void FadeIn()
     {
-        _mainMenuAnimator.Stop();
-        _mainMenuAnimator.clip = _fadeInAnimation;
-        _mainMenuAnimator.Play();
+        mainMenuAnimator.Stop();
+        mainMenuAnimator.clip = fadeInAnimation;
+        mainMenuAnimator.Play();
     }
 
     public void FadeOut()
     {
         UIManager.Instance.SetDummyCameraActive(false);
 
-        _mainMenuAnimator.Stop();
-        _mainMenuAnimator.clip = _fadeOutAnimation;
-        _mainMenuAnimator.Play();
+        mainMenuAnimator.Stop();
+        mainMenuAnimator.clip = fadeOutAnimation;
+        mainMenuAnimator.Play();
     }
 }
