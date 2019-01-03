@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum ItemTypeDefinitions { HEALTH, WEALTH, MANA, WEAPON, ARMOR, BUFF, EMPTY };
 public enum ItemArmorSubType { None, Head, Chest, Hands, Legs, Boots };
@@ -20,10 +21,10 @@ public class ItemPickUps_SO : ScriptableObject
     public Weapon weaponSlotObject = null;
 
     public bool isEquipped = false;
-    public bool isInteractable = false;
+    public bool interactable = false;
     public bool isStorable = false;
     public bool isUnique = false;
-    public bool isIndestructable = false;
+    public bool indestructable = false;
     public bool isQuestItem = false;
     public bool isStackable = false;
     public bool destroyOnUse = false;
