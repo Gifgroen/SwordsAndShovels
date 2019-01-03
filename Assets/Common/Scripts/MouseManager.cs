@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,11 +10,11 @@ public class MouseManager : MonoBehaviour
     public Texture2D doorway;
     public Texture2D sword;
 
-    public EventVector3 OnClickEnvironment;
-    public EventVector3 OnRightClickEnvironment;
-    public EventGameObject OnClickAttackable;
+    public EventVector3 onClickEnvironment;
+    public EventVector3 onRightClickEnvironment;
+    public EventGameObject onClickAttackable;
 
-    private bool _useDefaultCursor = false;
+    private bool useDefaultCursor;
 
     private void Awake()
     {
@@ -26,70 +24,69 @@ public class MouseManager : MonoBehaviour
         }
     }
 
-    void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)
+    private void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)
     {
-        _useDefaultCursor = (currentState != GameManager.GameState.Running);
+        useDefaultCursor = (currentState != GameManager.GameState.Running);
     }
 
-    void Update()
+    private void Update()
     {
-        // Set cursor
         Cursor.SetCursor(pointer, Vector2.zero, CursorMode.Auto);
-        if (_useDefaultCursor)
+        if (useDefaultCursor)
         {
             return;
         }
 
-        // Raycast into scene
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50, clickableLayer.value))
+        if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50, clickableLayer.value))
         {
-            // Override cursor
-            Cursor.SetCursor(target, new Vector2(16, 16), CursorMode.Auto);
+            return;
+        }
+        
+        // Override cursor
+        Cursor.SetCursor(target, new Vector2(16, 16), CursorMode.Auto);
 
-            bool door = false;
-            if (hit.collider.gameObject.tag == "Doorway")
-            {
-                Cursor.SetCursor(doorway, new Vector2(16, 16), CursorMode.Auto);
-                door = true;
-            }
+        bool door = false;
+        if (hit.collider.gameObject.CompareTag("Doorway"))
+        {
+            Cursor.SetCursor(doorway, new Vector2(16, 16), CursorMode.Auto);
+            door = true;
+        }
 
-            bool chest = false;
-            if (hit.collider.gameObject.tag == "Chest")
-            {
-                Cursor.SetCursor(pointer, new Vector2(16, 16), CursorMode.Auto);
-                door = true;
-            }
+        bool chest = false;
+        if (hit.collider.gameObject.CompareTag("Chest"))
+        {
+            Cursor.SetCursor(pointer, new Vector2(16, 16), CursorMode.Auto);
+            chest = true;
+        }
 
-            bool isAttackable = hit.collider.GetComponent(typeof(IAttackable)) != null;
-            if(isAttackable)
+        bool attackable = hit.collider.GetComponent(typeof(IAttackable)) != null;
+        if(attackable)
+        {
+            Cursor.SetCursor(sword, new Vector2(16, 16), CursorMode.Auto);
+        }
+        // If environment surface is clicked, invoke callbacks.
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (door)
             {
-                Cursor.SetCursor(sword, new Vector2(16, 16), CursorMode.Auto);
+                Transform hitDoorway = hit.collider.gameObject.transform;
+                onClickEnvironment.Invoke(hitDoorway.position + hitDoorway.forward * 10);
             }
-            // If environment surface is clicked, invoke callbacks.
-            if (Input.GetMouseButtonDown(0))
+            else if(attackable)
             {
-                if (door)
-                {
-                    Transform doorway = hit.collider.gameObject.transform;
-                    OnClickEnvironment.Invoke(doorway.position + doorway.forward * 10);
-                }
-                else if(isAttackable)
-                {
-                    GameObject attackable = hit.collider.gameObject;
-                    OnClickAttackable.Invoke(attackable);
-                }
-                else if (!chest)
-                {
-                    OnClickEnvironment.Invoke(hit.point);
-                }
+                onClickAttackable.Invoke(hit.collider.gameObject);
             }
-            else if(Input.GetMouseButtonDown(1))
+            else if (!chest)
             {
-                if(!door && !chest)
-                {
-                    OnRightClickEnvironment.Invoke(hit.point);
-                }
+                onClickEnvironment.Invoke(hit.point);
+            }
+        }
+        else if(Input.GetMouseButtonDown(1))
+        {
+            if(!door && !chest)
+            {
+                onRightClickEnvironment.Invoke(hit.point);
             }
         }
     }

@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -19,4 +20,4 @@ MonoBehaviour:
   criticalChance: 0.2
   Radius: 3
   TimeInScene: 1
-  AoePrefab: {fileID: 1434799359557126, guid: f042dacba8fa4462b9237f92d4732f87, type: 2}
+  AoePrefab: {fileID: 1434799359557126, guid: f042dacba8fa4462b9237f92d4732f87, type: 3}

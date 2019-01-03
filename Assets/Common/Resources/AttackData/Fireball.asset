@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -18,5 +19,5 @@ MonoBehaviour:
   criticalMultiplier: 2
   criticalChance: 0.2
   ProjectileToFire: {fileID: 114791495484987280, guid: dce1c4cecae704bb58af4998f6b78bea,
-    type: 2}
+    type: 3}
   ProjectileSpeed: 10

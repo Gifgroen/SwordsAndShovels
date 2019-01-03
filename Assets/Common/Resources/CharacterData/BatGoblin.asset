@@ -3,16 +3,41 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4364c8c27c003fe46ad6e1bb210f6ca3, type: 3}
   m_Name: BatGoblin
   m_EditorClassIdentifier: 
-  setManually: 1
-  saveDataOnClose: 0
+  onLevelUp:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Events+EventIntegerEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  onHeroDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Events+EventIntegerEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  onHeroGainedHealth:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Events+EventIntegerEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  onHeroDeath:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onHeroInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  isHero: 0
   maxHealth: 15
   currentHealth: 15
   maxWealth: 0
@@ -27,4 +52,4 @@ MonoBehaviour:
   currentEncumbrance: 0
   charExperience: 0
   charLevel: 0
-  charLevelUps: []
+  charLevels: []
