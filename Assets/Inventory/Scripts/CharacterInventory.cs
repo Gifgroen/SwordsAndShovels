@@ -5,21 +5,19 @@ using UnityEngine.UI;
 public class CharacterInventory : MonoBehaviour
 {
     #region Variable Declarations
-
     public CharacterStats charStats;
 
     public Image[] hotBarDisplayHolders = new Image[4];
-    
     public GameObject inventoryDisplayHolder;
     public Image[] inventoryDisplaySlots = new Image[30];
 
-    public Dictionary<int, InventoryEntry> itemsInInventory = new Dictionary<int, InventoryEntry>();
-    public InventoryEntry itemEntry;
-    
     private const int InventoryItemCap = 20;
+    
     private int idCount = 1;
     private bool addedItem = true;
 
+    public Dictionary<int, InventoryEntry> itemsInInventory = new Dictionary<int, InventoryEntry>();
+    public InventoryEntry itemEntry;
     #endregion
 
     #region Initializations
@@ -36,7 +34,7 @@ public class CharacterInventory : MonoBehaviour
     private void Update()
     {
         #region Watch for Hotbar Keypresses - Called by Character Controller Later
-        //Checking for a hot bar key to be pressed
+        //Checking for a hotbar key to be pressed
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             TriggerItemUse(101);
@@ -87,55 +85,56 @@ public class CharacterInventory : MonoBehaviour
         bool itsInInv = true;
 
         //Check to see if the item to be stored was properly submitted to the inventory - Continue if Yes otherwise do nothing
-        if (!itemEntry.invEntry)
+        if (itemEntry.invEntry)
         {
-            return;
-        }
-        //Check to see if any items exist in the inventory already - if not, add this item
-        if (itemsInInventory.Count == 0)
-        {
-            addedItem = AddItemToInv();
-        }
-        //If items exist in inventory
-        else
-        {
-            //Check to see if the item is stackable - Continue if stackable
-            if (itemEntry.invEntry.itemDefinition.isStackable)
-            {
-                foreach (KeyValuePair<int, InventoryEntry> ie in itemsInInventory)
-                {
-                    //Does this item already exist in inventory? - Continue if Yes
-                    if (itemEntry.invEntry.itemDefinition == ie.Value.invEntry.itemDefinition)
-                    {
-                        //Add 1 to stack and destroy the new instance
-                        ie.Value.stackSize += 1;
-                        AddItemToHotBar(ie.Value);
-                        itsInInv = true;
-                        Destroy(itemEntry.invEntry.gameObject);
-                        break;
-                    }
-                    //If item does not exist already in inventory then continue here
-
-                    itsInInv = false;
-                }
-            }
-            //If Item is not stackable then continue here
-            else
-            {
-                itsInInv = false;
-
-                //If no space and item is not stackable - say inventory full
-                if (itemsInInventory.Count == InventoryItemCap)
-                {
-                    itemEntry.invEntry.gameObject.SetActive(true);
-                    Debug.Log("Inventory is Full");
-                }
-            }
-
-            //Check if there is space in inventory - if yes, continue here
-            if (!itsInInv)
+            //Check to see if any items exist in the inventory already - if not, add this item
+            if (itemsInInventory.Count == 0)
             {
                 addedItem = AddItemToInv();
+            }
+            //If items exist in inventory
+            else
+            {
+                //Check to see if the item is stackable - Continue if stackable
+                if (itemEntry.invEntry.itemDefinition.isStackable)
+                {
+                    foreach (KeyValuePair<int, InventoryEntry> ie in itemsInInventory)
+                    {
+                        //Does this item already exist in inventory? - Continue if Yes
+                        if (itemEntry.invEntry.itemDefinition == ie.Value.invEntry.itemDefinition)
+                        {
+                            //Add 1 to stack and destroy the new instance
+                            ie.Value.stackSize += 1;
+                            AddItemToHotBar(ie.Value);
+                            itsInInv = true;
+                            Destroy(itemEntry.invEntry.gameObject);
+                            break;
+                        }
+                        //If item does not exist already in inventory then continue here
+                        else
+                        {
+                            itsInInv = false;
+                        }
+                    }
+                }
+                //If Item is not stackable then continue here
+                else
+                {
+                    itsInInv = false;
+
+                    //If no space and item is not stackable - say inventory full
+                    if (itemsInInventory.Count == InventoryItemCap)
+                    {
+                        itemEntry.invEntry.gameObject.SetActive(true);
+                        Debug.Log("Inventory is Full");
+                    }
+                }
+
+                //Check if there is space in inventory - if yes, continue here
+                if (!itsInInv)
+                {
+                    addedItem = AddItemToInv();
+                }
             }
         }
     }
@@ -180,32 +179,26 @@ public class CharacterInventory : MonoBehaviour
     {
         int hotBarCounter = 0;
         bool increaseCount = false;
-
-        //Check for open hot bar slot
         foreach (Image images in hotBarDisplayHolders)
         {
             hotBarCounter += 1;
-
             if (itemForHotBar.hotBarSlot == 0)
             {
-                if (images.sprite != null)
+                if (images.sprite == null)
                 {
-                    continue;
+                    //Add item to open hotbar slot
+                    itemForHotBar.hotBarSlot = hotBarCounter;
+                    //Change hotbar sprite to show item
+                    images.sprite = itemForHotBar.hbSprite;
+                    increaseCount = true;
+                    break;
                 }
-                //Add item to open hot bar slot
-                itemForHotBar.hotBarSlot = hotBarCounter;
-                //Change hot bar sprite to show item
-                images.sprite = itemForHotBar.hbSprite;
-                increaseCount = true;
-                break;
             }
-
-            if (itemForHotBar.invEntry.itemDefinition.isStackable)
+            else if (itemForHotBar.invEntry.itemDefinition.isStackable)
             {
                 increaseCount = true;
             }
         }
-
         if (increaseCount)
         {
             hotBarDisplayHolders[itemForHotBar.hotBarSlot - 1].GetComponentInChildren<Text>().text = itemForHotBar.stackSize.ToString();
@@ -214,7 +207,7 @@ public class CharacterInventory : MonoBehaviour
 
     private void DisplayInventory()
     {
-        inventoryDisplayHolder.SetActive(!inventoryDisplayHolder.activeSelf);
+        inventoryDisplayHolder.SetActive(inventoryDisplayHolder.activeSelf != true);
     }
 
     private void FillInventoryDisplay()
@@ -228,31 +221,38 @@ public class CharacterInventory : MonoBehaviour
             ie.Value.inventorySlot = slotCounter - 9;
         }
 
-        for (int i = slotCounter + 1; i < inventoryDisplaySlots.Length; i++)
+        while (slotCounter < 29)
         {
-            inventoryDisplaySlots[i].sprite = null;
+            slotCounter++;
+            inventoryDisplaySlots[slotCounter].sprite = null;
         }
     }
 
     private void TriggerItemUse(int itemToUseId)
     {
+        bool triggerItem = false;
+
         foreach (KeyValuePair<int, InventoryEntry> ie in itemsInInventory)
         {
             if (itemToUseId > 100)
             {
                 itemToUseId -= 100;
-                if (ie.Value.hotBarSlot != itemToUseId)
+
+                if (ie.Value.hotBarSlot == itemToUseId)
                 {
-                    continue;
+                    triggerItem = true;
                 }
             }
             else
             {
-                if (ie.Value.inventorySlot != itemToUseId)
+                if (ie.Value.inventorySlot == itemToUseId)
                 {
-                    continue;
+                    triggerItem = true;
                 }
             }
+
+            if (!triggerItem) continue;
+            
             if (ie.Value.stackSize == 1)
             {
                 if (ie.Value.invEntry.itemDefinition.isStackable)
@@ -267,27 +267,24 @@ public class CharacterInventory : MonoBehaviour
                     itemsInInventory.Remove(ie.Key);
                     break;
                 }
-
-                ie.Value.invEntry.UseItem(charStats);
-                if (ie.Value.invEntry.itemDefinition.indestructable)
+                else
                 {
-                    continue;
+                    ie.Value.invEntry.UseItem(charStats);
+                    if (!ie.Value.invEntry.itemDefinition.indestructable)
+                    {
+                        itemsInInventory.Remove(ie.Key);
+                        break;
+                    }
                 }
-                itemsInInventory.Remove(ie.Key);
+            }
+            else
+            {
+                ie.Value.invEntry.UseItem(charStats);
+                ie.Value.stackSize -= 1;
+                hotBarDisplayHolders[ie.Value.hotBarSlot - 1].GetComponentInChildren<Text>().text = ie.Value.stackSize.ToString();
                 break;
             }
-
-            ie.Value.invEntry.UseItem(charStats);
-            ie.Value.stackSize -= 1;
-            hotBarDisplayHolders[ie.Value.hotBarSlot - 1].GetComponentInChildren<Text>().text = ie.Value.stackSize.ToString();
-            break;
         }
-
         FillInventoryDisplay();
     }
-
-                
-        
-
-
 }

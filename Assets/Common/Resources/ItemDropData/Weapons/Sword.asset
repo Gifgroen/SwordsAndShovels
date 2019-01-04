@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -14,18 +15,18 @@ MonoBehaviour:
   itemName: Sword
   itemType: 3
   itemArmorSubType: 0
-  itemAmount: 10
+  amount: 0
   spawnChanceWeight: 5
   itemMaterial: {fileID: 2100000, guid: 1c0b8ab731c6b304086751987766544f, type: 2}
   itemIcon: {fileID: 21300000, guid: 3b2626a4a9b97ad42abbba3f24ceff0b, type: 3}
   itemSpawnObject: {fileID: 54985058832966930, guid: bdddc3344be6c184080352060c3061ed,
-    type: 2}
+    type: 3}
   weaponSlotObject: {fileID: 11400000, guid: 49eab774cd4aa47549ea7f15204eb806, type: 2}
   isEquipped: 0
-  isInteractable: 1
+  interactable: 0
   isStorable: 1
   isUnique: 1
-  isIndestructable: 1
+  indestructable: 1
   isQuestItem: 0
   isStackable: 0
   destroyOnUse: 0

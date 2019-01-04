@@ -44,7 +44,7 @@ public class ItemPickUp : MonoBehaviour
         var stats = other.GetComponent<CharacterStats>();
         if (itemDefinition.isStorable)
         {
-            StoreItem(other.GetComponentInChildren<CharacterInventory>(), stats);
+            StoreItem(FindObjectOfType<CharacterInventory>(), stats);
         }
         else
         {

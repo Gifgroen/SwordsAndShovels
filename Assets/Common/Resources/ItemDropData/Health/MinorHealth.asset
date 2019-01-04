@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Minor Health Potion
   itemType: 0
   itemArmorSubType: 0
-  amount: 0
+  amount: 25
   spawnChanceWeight: 20
   itemMaterial: {fileID: 2100000, guid: e4d803ef12551a8488e05f3cceea68dd, type: 2}
   itemIcon: {fileID: 21300000, guid: 8fe5b3303cdbf974abbdadeae0f5a5f7, type: 3}

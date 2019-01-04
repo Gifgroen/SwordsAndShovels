@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using UnityEngine.Events;
 
 public class HeroController : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class HeroController : MonoBehaviour
     private static readonly int AttackKey = Animator.StringToHash("Attack");
     
     public Aoe aoeStompAttack;
+
+    public UnityEvent onHeroInitialised
+    {
+        get { return stats.characterDefinition.onHeroInitialized; }
+    }
     
     private Animator animator;
     private NavMeshAgent agent;
