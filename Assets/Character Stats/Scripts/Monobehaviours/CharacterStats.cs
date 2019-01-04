@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterStats : MonoBehaviour
 {
@@ -63,10 +64,12 @@ public class CharacterStats : MonoBehaviour
     #region Weapon and Armor Change
     public void ChangeWeapon(ItemPickUp weaponPickUp)
     {
-        if (!characterDefinition.UnEquipWeapon(weaponPickUp, charInv, characterWeaponSlot))
+        if (characterDefinition.IsWeaponEquipped(weaponPickUp))
         {
-            characterDefinition.EquipWeapon(weaponPickUp, charInv, characterWeaponSlot);
+            return;
         }
+        characterDefinition.UnEquipCurrentWeapon(charInv, characterWeaponSlot);
+        characterDefinition.EquipWeapon(weaponPickUp, charInv, characterWeaponSlot);
     }
 
     public void ChangeArmor(ItemPickUp armorPickUp)
@@ -123,6 +126,35 @@ public class CharacterStats : MonoBehaviour
     {
         characterDefinition.baseDamage = damage;
         characterDefinition.currentDamage = damage;
+    }
+
+    #endregion
+    
+    #region Events
+
+    public void RegisterOnHeroInitialisedListener(UnityAction listener)
+    {
+        characterDefinition.onHeroInitialized.AddListener(listener);
+    }
+    
+    public void RegisterOnLevelUpListener(UnityAction<int> listener)
+    {
+        characterDefinition.onLevelUp.AddListener(listener);
+    }
+
+    public void RegisterOnDamagedListener(UnityAction<int> listener)
+    {
+        characterDefinition.onHeroDamaged.AddListener(listener);
+    }
+
+    public void RegisterOnGainedHealthListener(UnityAction<int> listener)
+    {
+        characterDefinition.onHeroGainedHealth.AddListener(listener);
+    }
+
+    public void RegisterOnHeroDeathListener(UnityAction listener)
+    {
+        characterDefinition.onHeroDeath.AddListener(listener);
     }
 
     #endregion

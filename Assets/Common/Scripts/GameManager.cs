@@ -11,6 +11,7 @@ public class GameManager : Manager<GameManager>
     
     [SerializeField]
     private string initialLevelName = "Main";
+    
     private const string GameOverLevelName = "GameOver";
     private const string RecapLevelName = "Recap";
 
@@ -26,8 +27,6 @@ public class GameManager : Manager<GameManager>
     public Events.EventGameState onGameStateChanged;
 
     private List<GameObject> instancedSystemPrefabs;
-
-    private GameState currentGameState = GameState.Pregame;
 
     private string currentLevelName = string.Empty;
 
@@ -47,11 +46,7 @@ public class GameManager : Manager<GameManager>
         }
     }
 
-    public GameState CurrentGameState
-    {
-        get { return currentGameState; }
-        set { currentGameState = value; }
-    }
+    public GameState CurrentGameState { get; set; } = GameState.Pregame;
 
     private void Start()
     {
@@ -60,9 +55,18 @@ public class GameManager : Manager<GameManager>
         UIManager.Instance.OnMainMenuFadeComplete.AddListener(HandleMainMenuFadeComplete);
     }
 
+    public void SetupHeroEventListeners(HeroController foundHero)
+    {
+        foundHero.RegisterOnHeroInitialised(OnHeroInit);
+        foundHero.RegisterOnLevelUpListener(OnHeroLeveledUp);
+        foundHero.RegisterOnDamagedListener(OnHeroDamaged);
+        foundHero.RegisterOnGainedHealthListener(OnHeroGainedHealth);
+        foundHero.RegisterOnHeroDeathListener(OnHeroDied);        
+    }
+
     private void Update()
     {
-        if (currentGameState == GameState.Pregame)
+        if (CurrentGameState == GameState.Pregame)
         {
             return;
         }
@@ -93,13 +97,13 @@ public class GameManager : Manager<GameManager>
         }
     }
 
-    void UpdateState(GameState state)
+    private void UpdateState(GameState state)
     {
-        GameState previousGameState = currentGameState;
-        currentGameState = state;
+        GameState previousGameState = CurrentGameState;
+        CurrentGameState = state;
 
         // ReSharper disable once SwitchStatementMissingSomeCases
-        switch (currentGameState)
+        switch (CurrentGameState)
         {
             case GameState.Pregame:
                 Time.timeScale = 1.0f;
@@ -112,7 +116,7 @@ public class GameManager : Manager<GameManager>
                 break;
         }
 
-        onGameStateChanged.Invoke(currentGameState, previousGameState);
+        onGameStateChanged.Invoke(CurrentGameState, previousGameState);
     }
 
     private void InstantiateSystemPrefabs()
@@ -155,7 +159,7 @@ public class GameManager : Manager<GameManager>
 
     public void TogglePause()
     {
-        UpdateState(currentGameState == GameState.Running ? GameState.Paused : GameState.Running);
+        UpdateState(CurrentGameState == GameState.Running ? GameState.Paused : GameState.Running);
     }
 
     public void RestartGame()
@@ -171,7 +175,7 @@ public class GameManager : Manager<GameManager>
 
     #region CallBacks
 
-    public void OnHeroLeveledUp(int newLevel)
+    public void OnHeroLeveledUp(int level)
     {
         UIManager.Instance.UpdateUnitFrame(hero);
         SoundManager.Instance.PlaySoundEffect(SoundEffect.LevelUp);
@@ -228,7 +232,7 @@ public class GameManager : Manager<GameManager>
     {
         UpdateState(GameState.Postgame);
         yield return new WaitForSeconds(1.5f);
-        UIManager.Instance.HideUI();
+        UIManager.Instance.HideUi();
         SceneManager.LoadScene(GameOverLevelName);
     }
 
@@ -236,7 +240,7 @@ public class GameManager : Manager<GameManager>
     {
         SceneManager.LoadScene(initialLevelName);
         InitSessions();
-        UIManager.Instance.ShowUI();
+        UIManager.Instance.ShowUi();
         RestartGame();
     }
 

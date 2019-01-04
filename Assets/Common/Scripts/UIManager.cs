@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : Manager<UIManager>
@@ -21,8 +19,6 @@ public class UIManager : Manager<UIManager>
     [SerializeField] private Text TitleText;
     [SerializeField] private Text TagLine;
 
-
-
     public Events.EventFadeComplete OnMainMenuFadeComplete;
 
     private void Start()
@@ -31,7 +27,7 @@ public class UIManager : Manager<UIManager>
         GameManager.Instance.onGameStateChanged.AddListener(HandleGameStateChanged);
     }
 
-    void HandleMainMenuFadeComplete(bool fadeOut)
+    private void HandleMainMenuFadeComplete(bool fadeOut)
     {
         TagLine.gameObject.SetActive(!fadeOut);
         TitleText.gameObject.SetActive(!fadeOut);
@@ -40,7 +36,7 @@ public class UIManager : Manager<UIManager>
         OnMainMenuFadeComplete.Invoke(fadeOut);
     }
 
-    void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)
+    private void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)
     {
         _pauseMenu.gameObject.SetActive(currentState == GameManager.GameState.Paused);
         bool showUnitFrame = currentState == GameManager.GameState.Running ||
@@ -96,7 +92,7 @@ public class UIManager : Manager<UIManager>
         YouWin.gameObject.SetActive(true);
     }
 
-    public void HideUI()
+    public void HideUi()
     {
         unitFrame.SetActive(false);
         SetDummyCameraActive(false);
@@ -106,7 +102,7 @@ public class UIManager : Manager<UIManager>
         TitleText.gameObject.SetActive(false);
     }
 
-    public void ShowUI()
+    public void ShowUi()
     {
         _mainMenu.gameObject.SetActive(true);
         _mainMenu.FadeOut();

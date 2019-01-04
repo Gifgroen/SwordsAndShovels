@@ -1,6 +1,6 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 using UnityEngine.Events;
 
 public class HeroController : MonoBehaviour
@@ -11,36 +11,21 @@ public class HeroController : MonoBehaviour
     
     public Aoe aoeStompAttack;
 
-    public UnityEvent onHeroInitialised
-    {
-        get { return stats.characterDefinition.onHeroInitialized; }
-    }
-    
     private Animator animator;
     private NavMeshAgent agent;
     private CharacterStats stats;
 
     private GameObject attackTarget;
 
-    private GameManager gameManager;
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         stats = GetComponent<CharacterStats>();
-
-        gameManager = GameObject.FindWithTag(GameManager.Tag).GetComponent<GameManager>();
     }
 
     private void Start()
     {
-        stats.characterDefinition.onLevelUp.AddListener(gameManager.OnHeroLeveledUp);
-        stats.characterDefinition.onHeroDamaged.AddListener(gameManager.OnHeroDamaged);
-        stats.characterDefinition.onHeroGainedHealth.AddListener(gameManager.OnHeroGainedHealth);
-        stats.characterDefinition.onHeroDeath.AddListener(gameManager.OnHeroDied);
-        stats.characterDefinition.onHeroInitialized.AddListener(gameManager.OnHeroInit);
-
         stats.characterDefinition.onHeroInitialized.Invoke();
     }
 
@@ -49,6 +34,7 @@ public class HeroController : MonoBehaviour
         animator.SetFloat(SpeedKey, agent.velocity.magnitude);
     }
 
+    #region Character actions
     public void SetDestination(Vector3 destination)
     {
         StopAllCoroutines();
@@ -118,7 +104,9 @@ public class HeroController : MonoBehaviour
         var o = gameObject;
         aoeStompAttack.Fire(o, o.transform.position, LayerMask.NameToLayer("PlayerSpells"));
     }
-
+    #endregion
+    
+    #region Reporters
     public int GetCurrentHealth()
     {
         return stats.characterDefinition.currentHealth;
@@ -138,6 +126,7 @@ public class HeroController : MonoBehaviour
     {
         return stats.characterDefinition.charExperience;
     }
+    #endregion
 
     #region Callbacks
 
@@ -154,6 +143,35 @@ public class HeroController : MonoBehaviour
     public void OnOutOfWaves()
     {
         Debug.LogWarning("No more waves. you Win!");
+    }
+
+    #endregion
+
+    #region Events
+
+    public void RegisterOnHeroInitialised(UnityAction listener)
+    {
+        stats.RegisterOnHeroInitialisedListener(listener);
+    }
+
+    public void RegisterOnLevelUpListener(UnityAction<int> listener)
+    {
+        stats.RegisterOnLevelUpListener(listener);
+    }
+
+    public void RegisterOnDamagedListener(UnityAction<int> listener)
+    {
+        stats.RegisterOnDamagedListener(listener);
+    }
+
+    public void RegisterOnGainedHealthListener(UnityAction<int> listener)
+    {
+        stats.RegisterOnGainedHealthListener(listener);
+    }
+    
+    public void RegisterOnHeroDeathListener(UnityAction listener)
+    {
+        stats.RegisterOnHeroDeathListener(listener);
     }
 
     #endregion

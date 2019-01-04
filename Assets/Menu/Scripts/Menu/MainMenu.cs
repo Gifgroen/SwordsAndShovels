@@ -26,7 +26,7 @@ public class MainMenu : MonoBehaviour
         UIManager.Instance.SetDummyCameraActive(true);
     }
 
-    void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)
+    private void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState previousState)
     {
         if (previousState == GameManager.GameState.Pregame && currentState == GameManager.GameState.Running)
         {

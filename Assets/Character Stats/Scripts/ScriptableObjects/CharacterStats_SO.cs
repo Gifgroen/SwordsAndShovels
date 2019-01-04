@@ -122,6 +122,7 @@ public class CharacterStats_SO : ScriptableObject
     public void EquipWeapon(ItemPickUp weaponPickUp, CharacterInventory charInventory, GameObject weaponSlot)
     {
         weapon = weaponPickUp;
+        
         charInventory.inventoryDisplaySlots[2].sprite = weaponPickUp.itemDefinition.itemIcon;
         Instantiate(weaponPickUp.itemDefinition.weaponSlotObject.weaponPreb, weaponSlot.transform);
         currentDamage = baseDamage + weapon.itemDefinition.amount;
@@ -186,21 +187,16 @@ public class CharacterStats_SO : ScriptableObject
         }
     }
 
-    public bool UnEquipWeapon(ItemPickUp weaponPickUp, CharacterInventory charInventory, GameObject weaponSlot)
+    public void UnEquipCurrentWeapon(CharacterInventory charInventory, GameObject weaponSlot)
     {
         if (weapon == null)
         {
-            return false;
+            return;
         }
-        
-        bool previousWeaponSame = weapon == weaponPickUp;
-        
         charInventory.inventoryDisplaySlots[2].sprite = null;
         Destroy(weaponSlot.transform.GetChild(0).gameObject);
         weapon = null;
         currentDamage = baseDamage;
-
-        return previousWeaponSame;
     }
 
     public bool UnEquipArmor(ItemPickUp armorPickUp, CharacterInventory charInventory)
@@ -274,6 +270,15 @@ public class CharacterStats_SO : ScriptableObject
     }
     #endregion
 
+    #region Reporters
+
+    public bool IsWeaponEquipped(ItemPickUp pickUp)
+    {
+        return weapon == pickUp;
+    }
+        
+    #endregion
+    
     #region Character Level Up and Death
     private void Death()
     {

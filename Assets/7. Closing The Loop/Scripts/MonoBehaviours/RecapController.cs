@@ -17,7 +17,7 @@ public class RecapController : MonoBehaviour
     private SessionStats DisplayStats;
 
     // Use this for initialization
-    void Start () 
+    private void Start () 
     {
         int count = StatsManager.sessionKeeper.Sessions.Count - 1;
         SessionSlider.maxValue = count;
